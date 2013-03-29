@@ -39,7 +39,7 @@ For now, the only `MacMailer::Message` is the only class in the library. To popu
 		:recipients => [
 			{ :address => "jsvine@gmail.com" },
 			{ :address => "jsvine+cced@gmail.com", :type => :cc },
-			{	:address => "jsvine+bcced@gmail.com", :name => "Jeremy", :type => :bcc }
+			{ :address => "jsvine+bcced@gmail.com", :name => "Jeremy", :type => :bcc }
 		]
 	})
 
