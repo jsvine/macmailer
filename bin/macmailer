@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+require "trollop"
+require "macmailer"
+
+opts = Trollop::options do
+	recipient_note = "either as just an address, or an address followed by a name. Can be declared multple times."
+	opt :subject, "Subject line.", :short => "-s", :type => :string
+	opt :body, "Body.", :short => "-b", :type => :string
+	opt :to, "Specify a To: recepient, #{recipient_note}", :multi => true, :type => :strings
+	opt :cc, "Specify a CC: recepient, #{recipient_note}", :multi => true, :type => :strings
+	opt :bcc, "Specify a BCC: recepient, #{recipient_note}", :multi => true, :type => :strings
+	opt :send, "Automatically send the email. If not specified, script only creates the email."
+	opt :show, "Bring Mail.app to the front of your screen. Otherwise, remains in background."
+	opt :thanks, "Write Jeremy a note. (Note: Does *not* auto-send message. Overrides all other options.)"
+end
+
+# Send thanks and exit if "--thanks" flag is provided
+if opts[:thanks]
+	MacMailer::Message.new({
+		:subject => "re. MacMailer",
+		:body => "Thanks! It's freaking awesome.",
+		:recipients => [
+			:address => "jsvine@gmail.com",
+			:name => "Jeremy Singer-Vine"
+		]
+	}).create.show
+	exit
+end
+	
+# Otherwise, create and/or send the message
+recipient_types = [ :to, :cc, :bcc ]
+def opt_to_recipients (multi, type)
+	multi.map {|m| { :address => m.shift, :name => m.join(" "), :type => type } }
+end
+
+message = MacMailer::Message.new({
+	:subject => opts[:subject],
+	:body => opts[:body],
+	:recipients => recipient_types.map do |sym|
+		opt_to_recipients(opts[sym], sym)
+	end.flatten(1)
+}).method(opts[:send] ? :send : :create).call
+message.show if opts[:show]
