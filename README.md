@@ -6,7 +6,7 @@ __MacMailer__ is a command-line utility and Ruby library for creating and sendin
 `gem install macmailer`
 
 
-## Command-line Usage
+## Command-Line Usage
 
 You can create and send messages from the command-line with MacMailer. All flags are optional. So to create a blank message — it'll show up in Mail.app in the background — simply type:
 
@@ -52,6 +52,6 @@ Or, if you're absolutely sure you want to send the email before checking it:
 	msg.send
 
 
-## Send Thanks
+## Just for Fun
 
 	macmailer --thanks
